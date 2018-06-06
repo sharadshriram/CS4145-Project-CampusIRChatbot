@@ -16,8 +16,12 @@ class Database:
     return self.user.find_one({"userid": userid})
 
   def createUser(self, userid, username):
-    model = {"userid": userid, "username": username}
+    model = {"userid": userid, "username": username, "state": "idle"}
     self.user.insert_one(model)
 
   def updateUser(self, userid, model):
-    self.user.update_one({"userid": userid,model})
+    self.user.update_one({"userid": userid}, model)
+
+  # User's conversation state (idle, asking, answering, modeling)
+  def setUserState(self, userid, state):
+    self.updateUser(userid, {"state": state})
