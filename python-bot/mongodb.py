@@ -20,7 +20,7 @@ class Database:
     self.user.insert_one(model)
 
   def updateUser(self, userid, model):
-    self.user.update_one({"userid": userid}, model)
+    self.user.update_one({"userid": userid}, {"$set": model})
 
   # User's conversation state (idle, asking, answering, modeling)
   def setUserState(self, userid, state):

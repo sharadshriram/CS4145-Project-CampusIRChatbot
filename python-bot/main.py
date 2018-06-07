@@ -3,7 +3,8 @@ import logging
 import settings
 from bot import Bot
 from mongodb import Database
-import pprint
+from usermodel import start_model
+from usermodel import handle_model
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=settings.LOGLEVEL)
 
@@ -20,14 +21,14 @@ def on_message(bot, update):
   if(not user):
     handle_newUser(bot, update)
     return
-
-  if(user.state == "asking"):
+    
+  if(user['state'] == "asking"):
     handle_question(bot, update)
-  if(user.state == "answering"):
+  if(user['state'] == "answering"):
     handle_answer(bot, update)
-  if(user.state == "modeling"):
+  if(user['state'] == "modeling"):
     handle_model(bot, update)
-  if(user.state == "idle"):
+  if(user['state'] == "idle"):
     handle_idle(bot, update)
 
 # Figure out new state here
@@ -42,10 +43,6 @@ def handle_question(bot, update):
 def handle_answer(bot, update):
   echo(bot, update)
 
-# Handle user model here
-def handle_model(bot, update):
-  echo(bot, update)
-
 def handle_newUser(bot, update):
   db.createUser(update.message.from_user.id, update.message.from_user.first_name)
 
@@ -58,7 +55,6 @@ def start(bot, update):
   if(not db.getUser(update.message.from_user.id)):
     handle_newUser(bot, update)
   
-  bot.send_message(chat_id=update.message.chat_id, text="Hi " + update.message.from_user.first_name)
-
+  start_model(bot,update)
 
 bot.start_polling()
