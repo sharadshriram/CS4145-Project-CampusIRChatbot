@@ -37,6 +37,7 @@ def handle_model(ctx):
       reply = 'Did not add `%s` to your preferences.' % (pending[user_id] + ' ' + courses[pending[user_id]])
     ctx.reply(reply)
     ctx.reply(recommendations['course']['question'])
+    ctx.user.save_preference('course', pending[user_id])
     del pending[user_id]
   else:
     closest = get_close_matches(ctx.message, [code + ' ' + courses[code] for code in courses], cutoff=0)[0]
