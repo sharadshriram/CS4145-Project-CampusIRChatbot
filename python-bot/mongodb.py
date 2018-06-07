@@ -5,23 +5,31 @@ except ImportError:
     sys.exit()
 
 
+client = MongoClient()
+db = client.chatbot
 
-class Database:
-  def __init__(self):
-    self.client = MongoClient()
-    self.db = self.client.chatbot
-    self.user = self.db.user
+def get_user(user_id, user_name):
+  user = db.user.find_one({"userid": user_id})
+  if(not user):
+    create_user(user_id, user_name)
+    user = db.user.find_one({"userid": user_id})
+  return User(user)
 
-  def getUser(self,userid):
-    return self.user.find_one({"userid": userid})
+def create_user(user_id, username):
+  model = {"userid": user_id, "username": username, "state": "idle"}
+  db.user.insert_one(model)
 
-  def createUser(self, userid, username):
-    model = {"userid": userid, "username": username, "state": "idle"}
-    self.user.insert_one(model)
+def update_user(user_id, model):
+  db.user.update_one({"userid": user_id}, {"$set": model})
 
-  def updateUser(self, userid, model):
-    self.user.update_one({"userid": userid}, {"$set": model})
+class User:
+  def __init__(self, user):
+    self.id = user['userid']
+    self.name = user['username']
+    self.state = user['state']
 
   # User's conversation state (idle, asking, answering, modeling)
-  def setUserState(self, userid, state):
-    self.updateUser(userid, {"state": state})
+  def set_state(self, state):
+    self.state = state
+    update_user(self.id, {"state": state})
+

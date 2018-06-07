@@ -2,59 +2,44 @@
 import logging
 import settings
 from bot import Bot
-from mongodb import Database
 from usermodel import start_model
 from usermodel import handle_model
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=settings.LOGLEVEL)
 
 bot = Bot(token=settings.TOKEN)
-db = Database()
 
 @bot.on_message
-def on_message(bot, update):
-  user = db.getUser(update.message.from_user.id)
+def on_message(ctx):
 
-  # print(user)
-  # print(update.message.from_user) # user information such as name and id
-
-  if(not user):
-    handle_newUser(bot, update)
-    return
-    
-  if(user['state'] == "asking"):
-    handle_question(bot, update)
-  if(user['state'] == "answering"):
-    handle_answer(bot, update)
-  if(user['state'] == "modeling"):
-    handle_model(bot, update)
-  if(user['state'] == "idle"):
-    handle_idle(bot, update)
+  if(ctx.user.state == "asking"):
+    handle_question(ctx)
+  if(ctx.user.state == "answering"):
+    handle_answer(ctx)
+  if(ctx.user.state == "modeling"):
+    handle_model(ctx)
+  if(ctx.user.state == "idle"):
+    handle_idle(ctx)
 
 # Figure out new state here
-def handle_idle(bot, update):
-  echo(bot, update)
+def handle_idle(ctx):
+  echo(ctx)
 
 # Figure out crowdsource task here
-def handle_question(bot, update):
-  echo(bot, update)
+def handle_question(ctx):
+  echo(ctx)
 
 # Figure out answer to question here
-def handle_answer(bot, update):
-  echo(bot, update)
-
-def handle_newUser(bot, update):
-  db.createUser(update.message.from_user.id, update.message.from_user.first_name)
+def handle_answer(ctx):
+  echo(ctx)
 
 # placeholder
-def echo(bot, update):
-  bot.send_message(chat_id=update.message.chat_id, text="Hi " + user.username)
+def echo(ctx):
+  ctx.reply("Hi " + ctx.user.name)
 
+# start user modeling state
 @bot.command('start')
-def start(bot, update):
-  if(not db.getUser(update.message.from_user.id)):
-    handle_newUser(bot, update)
-  
-  start_model(bot,update)
+def start(ctx):
+  start_model(ctx)
 
 bot.start_polling()

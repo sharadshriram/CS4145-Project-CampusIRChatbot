@@ -6,6 +6,8 @@ except ImportError:
     print("MyCI requires python-telegram-bot library.\n")
     sys.exit()
 
+import mongodb as db
+
 class Bot:
 
   def __init__(self, token=None):
@@ -17,10 +19,27 @@ class Bot:
 
   def command(self, command_name):
     def decorator(command_function):
-      handler = CommandHandler(command_name, command_function)
+      def handler_function(bot, update):
+        command_function(Context(bot, update))
+      handler = CommandHandler(command_name, handler_function)
       self.dispatcher.add_handler(handler)
     return decorator
 
   def on_message(self, message_function):
-    handler = MessageHandler(Filters.text, message_function)
+    def handler_function(bot, update):
+        message_function(Context(bot, update))
+    handler = MessageHandler(Filters.text, handler_function)
     self.dispatcher.add_handler(handler)
+
+class Context:
+  def __init__(self, bot, update):
+    self.chat_id = update.message.chat_id
+    self.message = update.message.text
+    self.user = update.message.from_user
+    self.bot = bot
+    self.user = db.get_user(update.message.from_user.id,update.message.from_user.first_name)
+
+  def reply(self, message):
+    self.bot.send_message(chat_id=self.chat_id, text=message, parse_mode='Markdown')
+
+
