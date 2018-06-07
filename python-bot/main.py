@@ -2,9 +2,8 @@
 import logging
 import settings
 from bot import Bot
-from usermodel import start_model
-from usermodel import handle_model
-
+from usermodel import start_model, handle_model
+from question import start_question, handle_question
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=settings.LOGLEVEL)
 
 bot = Bot(token=settings.TOKEN)
@@ -14,22 +13,19 @@ def on_message(ctx):
 
   if(ctx.user.state == "asking"):
     handle_question(ctx)
+    return
   if(ctx.user.state == "answering"):
-    handle_answer(ctx)
+    handle_answer(ctx) # Figure out crowdsourcer's answer here
+    return
   if(ctx.user.state == "modeling"):
     handle_model(ctx)
+    return
   if(ctx.user.state == "idle"):
-    handle_idle(ctx)
+    handle_idle(ctx) # Figure out new state here
 
-# Figure out new state here
 def handle_idle(ctx):
   echo(ctx)
 
-# Figure out crowdsource task here
-def handle_question(ctx):
-  echo(ctx)
-
-# Figure out answer to question here
 def handle_answer(ctx):
   echo(ctx)
 
@@ -41,5 +37,10 @@ def echo(ctx):
 @bot.command('start')
 def start(ctx):
   start_model(ctx)
+
+# start recommendation here
+@bot.command('recommend')
+def recommend(ctx):
+  start_question(ctx)
 
 bot.start_polling()
