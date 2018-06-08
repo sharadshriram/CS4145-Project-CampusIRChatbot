@@ -4,6 +4,7 @@ import settings
 from bot import Bot
 from usermodel import start_model, handle_model
 from question import start_question, handle_question
+from answer import handle_answer
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=settings.LOGLEVEL)
 
 bot = Bot(token=settings.TOKEN)
@@ -24,14 +25,7 @@ def on_message(ctx):
     handle_idle(ctx) # Figure out new state here
 
 def handle_idle(ctx):
-  echo(ctx)
-
-def handle_answer(ctx):
-  echo(ctx)
-
-# placeholder
-def echo(ctx):
-  ctx.reply("Hi " + ctx.user.name)
+  ctx.reply("Hi %s, you can use the command `/recommend` to ask for a recommendation!" % ctx.user.name)
 
 # start user modeling state
 @bot.command('start')
@@ -42,5 +36,7 @@ def start(ctx):
 @bot.command('recommend')
 def recommend(ctx):
   start_question(ctx)
+
+
 
 bot.start_polling()

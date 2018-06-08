@@ -28,3 +28,10 @@ def get_recommendation_type(message):
   for x in recommendations:
     if recommendations[x]['name'] == closest:
       return x
+
+def get_course_names(user_courses):
+  res = ''
+  for c in user_courses:
+    res += '\n `' + c + ' ' + courses[c] + '`'
+
+  return res
