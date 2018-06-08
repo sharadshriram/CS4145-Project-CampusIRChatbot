@@ -12,13 +12,13 @@ bot = Bot(token=settings.TOKEN)
 def on_message(ctx):
 
   if(ctx.user.state == "asking"):
-    handle_question(ctx)
+    handle_question(ctx) # Figure out what user wants here
     return
   if(ctx.user.state == "answering"):
     handle_answer(ctx) # Figure out crowdsourcer's answer here
     return
   if(ctx.user.state == "modeling"):
-    handle_model(ctx)
+    handle_model(ctx) # Handle preferences here
     return
   if(ctx.user.state == "idle"):
     handle_idle(ctx) # Figure out new state here
