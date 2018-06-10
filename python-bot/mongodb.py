@@ -19,10 +19,11 @@ def get_user(user_id, user_name=None, chat_id=None):
 
 def create_user(user_id, username, chat_id):
   model = {
-    'userid': user_id, 
+    'userid': user_id,
     'chatid': chat_id,
     'username': username,
     'state': 'idle',
+    'incentive': 0,
     'preferences': {
       'course': []
     },
@@ -32,6 +33,9 @@ def create_user(user_id, username, chat_id):
 
 def update_user(user_id, model):
   db.user.update_one({'userid': user_id}, {'$set': model})
+
+def update_incentive(user_id, value):
+  db.user.update_one({'userid': user_id}, {'incentive': value})
 
 def get_all_users():
   return db.user.find({'state': 'idle'})
@@ -47,10 +51,11 @@ def create_task(task_type, user_id):
 
   return Task(db.task.find_one({'_id': task_id.inserted_id}))
 
-def get_task(task_type, user_id, finished=False):
+def get_task(task_type, user_id, finished):
   task = db.task.find_one({'type': task_type, 'user': user_id, 'finished': finished})
   if(task):
     return Task(task)
+
 
 def update_task(task_id, model):
   db.task.update_one({'_id': task_id}, {'$set': model})
@@ -60,9 +65,11 @@ class User:
     self.id = user['userid']
     self.name = user['username']
     self.state = user['state']
-    self.preferences = user['preferences']  
+    self.incentive = user['incentive']
+    self.preferences = user['preferences']
     self.chat_id = user['chatid']
     self.task = user['task']
+
 
   # User's conversation state (idle, asking, answering, modeling)
   def set_state(self, state):
@@ -93,6 +100,12 @@ class User:
   def send_message(self, ctx, message):
     ctx.bot.send_message(chat_id=self.chat_id, text=message, parse_mode='Markdown')
 
+  def del_preference(self, pref_type, preference):
+    preferences = set(self.preferences[pref_type])
+    preferences.remove(preference)
+    self.preferences[pref_type] = list(preferences)
+    update_user(self.id, {'preferences': self.preferences})
+
 class Task:
   def __init__(self, task):
     self.id = task['_id']
@@ -102,10 +115,12 @@ class Task:
     self.preferences = self.user.preferences[task['type']]
     self.date = task['date']
     self.answers = task['answers']
-    
+
   def save_answer(self, answer, worker_id):
     self.answers.append(answer)
     worker = get_user(worker_id)
     worker.conclude_task()
     update_task(self.id, {'answers': self.answers})
 
+  def get_pref(self):
+    return self.user

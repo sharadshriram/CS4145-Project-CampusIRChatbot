@@ -1,6 +1,6 @@
 from difflib import get_close_matches
 from recommendations import recommendations, recommendation_list
-
+from mongodb import update_user
 courses = recommendations['course']['options']
 
 # pending course confirmations for users
@@ -8,13 +8,20 @@ pending = {}
 
 def handle_answer(ctx):
   user_id = ctx.user.id
+  requester_preferences = ctx.user.get_task().preferences
   if user_id in pending.keys():
-    closest = get_close_matches(ctx.message, ['yes','no'], cutoff=0)[0]
-    if closest == 'yes':
-      reply = 'Added `%s` to my survey. Thank you for your answer!' % (pending[user_id] + ' ' + courses[pending[user_id]])
-      ctx.user.get_task().save_answer(pending[user_id], user_id)
+    if pending[user_id] in requester_preferences:
+      reply = '''Please add some other recommendation'''
     else:
-      reply = 'What course would you recommend?'
+      closest = get_close_matches(ctx.message, ['yes','no'], cutoff=0)[0]
+      if closest == 'yes':
+        reply = 'Added `%s` to my survey. Thank you for your answer!' % (pending[user_id] + ' ' + courses[pending[user_id]])
+        print(ctx.user.incentive)
+        print(ctx.user.incentive+1)
+        update_user(user_id, {'incentive': (ctx.user.incentive+1)})
+        ctx.user.get_task().save_answer(pending[user_id], user_id)
+      else:
+        reply = 'Please retype the recommendation?'
     del pending[user_id]
     ctx.reply(reply)
 
