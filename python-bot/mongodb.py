@@ -51,7 +51,7 @@ def create_task(task_type, user_id):
 
   return Task(db.task.find_one({'_id': task_id.inserted_id}))
 
-def get_task(task_type, user_id, finished):
+def get_task(task_type, user_id, finished=False):
   task = db.task.find_one({'type': task_type, 'user': user_id, 'finished': finished})
   if(task):
     return Task(task)

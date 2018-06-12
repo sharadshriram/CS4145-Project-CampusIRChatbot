@@ -43,4 +43,4 @@ def notify_workers(ctx, task, requester_id):
     if(user_pref.intersection(crowd_pref)):
       user.give_task(task)
       user.send_message(ctx, 'Hi, I am looking for a course recommendation for a student that liked: \n %s' % get_course_names(user_pref))
-      createWebTask('I am looking for a course recommendation for a student that liked: \n %s' % get_course_names(user_pref))
+      #createWebTask('I am looking for a course recommendation for a student that liked: \n %s' % get_course_names(user_pref))

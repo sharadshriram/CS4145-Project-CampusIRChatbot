@@ -20,20 +20,20 @@ def handle_question(ctx):
     ctx.user.set_state('idle')
 
     if(db.get_task(recommendation_type, ctx.user.id, False)):
-    ctx.reply("I am already looking for a recommendation for you on `%s`, I will come back to you with an answer later." % recommendations[recommendation_type]['name'])
-    return
-  task = db.create_task(recommendation_type, ctx.user.id)
+      ctx.reply("I am already looking for a recommendation for you on `%s`, I will come back to you with an answer later." % recommendations[recommendation_type]['name'])
+      return
+    task = db.create_task(recommendation_type, ctx.user.id)
 
-  notify_workers(ctx, task, ctx.user.id)
-  ctx.reply("We will start asking around for recommendations on `%s`!" % recommendations[recommendation_type]['name'])
+    notify_workers(ctx, task, ctx.user.id)
+    ctx.reply("We will start asking around for recommendations on `%s`!" % recommendations[recommendation_type]['name'])
 
-  def callback():
-    task = db.get_task(recommendation_type, ctx.user.id)
-    ctx.reply(aggregate_answer(task))
-    task.finish()
+    def callback():
+      task = db.get_task(recommendation_type, ctx.user.id)
+      ctx.reply(aggregate_answer(task))
+      task.finish()
 
-  t = Timer(DELAY, callback)
-  t.start()
+    t = Timer(DELAY, callback)
+    t.start()
 
 def aggregate_answer(task):
   results = {}
