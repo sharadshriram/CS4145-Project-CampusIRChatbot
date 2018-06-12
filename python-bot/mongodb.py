@@ -103,9 +103,12 @@ class Task:
     self.date = task['date']
     self.answers = task['answers']
     
-  def save_answer(self, answer, worker_id):
-    self.answers.append(answer)
-    worker = get_user(worker_id)
+  def save_answer(self, answer, user):
+    worker = user
+    user_pref = set(self.preferences)
+    worker_pref = set(worker.preferences[self.type])
+    similarity = len(user_pref.intersection(worker_pref))
+    self.answers.append([answer,similarity])
     worker.conclude_task()
     update_task(self.id, {'answers': self.answers})
 

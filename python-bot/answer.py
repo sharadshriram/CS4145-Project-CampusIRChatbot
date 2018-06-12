@@ -12,7 +12,7 @@ def handle_answer(ctx):
     closest = get_close_matches(ctx.message, ['yes','no'], cutoff=0)[0]
     if closest == 'yes':
       reply = 'Added `%s` to my survey. Thank you for your answer!' % (pending[user_id] + ' ' + courses[pending[user_id]])
-      ctx.user.get_task().save_answer(pending[user_id], user_id)
+      ctx.user.get_task().save_answer(pending[user_id], ctx.user)
     else:
       reply = 'What course would you recommend?'
     del pending[user_id]
