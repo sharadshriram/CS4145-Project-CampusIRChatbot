@@ -18,7 +18,7 @@ def handle_question(ctx):
     return
   task = db.create_task(recommendation_type, ctx.user.id)
 
-  notify_workers(ctx, task)
+  notify_workers(ctx, task, ctx.user.id)
   ctx.reply("We will start asking around for recommendations on `%s`!" % recommendations[recommendation_type]['name'])
 
   def callback():
