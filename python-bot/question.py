@@ -6,14 +6,20 @@ import mongodb as db
 from settings import DELAY
 
 def start_question(ctx):
-  ctx.reply("What would you like to receive recommendations on? I can give recommendations on: \n%s" % recommendation_list())
-  ctx.user.set_state('asking')
+    if len(ctx.user.preferences['course']) > 0:
+        ctx.reply(
+            "What would you like to receive recommendations on? I can give recommendations on: \n%s" % recommendation_list())
+        ctx.user.set_state('asking')
+    else:
+        ctx.reply("Please add courses to your preference list to get recommendation")
+        ctx.user.set_state('modeling')
+
 
 def handle_question(ctx):
-  recommendation_type = get_recommendation_type(ctx.message)
-  ctx.user.set_state('idle')
+    recommendation_type = get_recommendation_type(ctx.message)
+    ctx.user.set_state('idle')
 
-  if(db.get_task(recommendation_type, ctx.user.id)):
+    if(db.get_task(recommendation_type, ctx.user.id, False)):
     ctx.reply("I am already looking for a recommendation for you on `%s`, I will come back to you with an answer later." % recommendations[recommendation_type]['name'])
     return
   task = db.create_task(recommendation_type, ctx.user.id)
@@ -40,3 +46,4 @@ def aggregate_answer(task):
   sorted_results = sorted(results.items(), key=operator.itemgetter(1))
 
   return 'My top result is: %s' % get_course_names([sorted_results[0][0]])
+

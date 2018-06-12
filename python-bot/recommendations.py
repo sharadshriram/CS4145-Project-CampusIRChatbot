@@ -10,7 +10,7 @@ with open('courselist.csv') as csvDataFile:
 recommendations = {
   'course' : {
     'name' : 'Courses',
-    'question' : "What are some courses that you liked?",
+    'question' : "What courses would you like to add to your preference list?",
     'options' : courses
   }
 }

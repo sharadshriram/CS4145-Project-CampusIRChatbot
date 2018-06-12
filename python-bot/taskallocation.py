@@ -35,7 +35,7 @@ def notify_workers(ctx, task, requester_id):
   requesterId = requester_id
 
   for user in users:
-    print(user)
+    #print(user)
     user = db.User(user)
     crowd_pref = set(user.preferences[task.type])
 
@@ -44,9 +44,3 @@ def notify_workers(ctx, task, requester_id):
       user.give_task(task)
       user.send_message(ctx, 'Hi, I am looking for a course recommendation for a student that liked: \n %s' % get_course_names(user_pref))
       createWebTask('I am looking for a course recommendation for a student that liked: \n %s' % get_course_names(user_pref))
-
-
-    
-
-
-

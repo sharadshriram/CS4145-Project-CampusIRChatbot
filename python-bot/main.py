@@ -2,7 +2,7 @@
 import logging
 import settings
 from bot import Bot
-from usermodel import start_model, handle_model
+from usermodel import start_model, handle_model, start_addpreference, start_menu, start_removepreference, handle_update, start_displaypreference, start_points
 from question import start_question, handle_question
 from answer import handle_answer
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=settings.LOGLEVEL)
@@ -15,17 +15,20 @@ def on_message(ctx):
   if(ctx.user.state == "asking"):
     handle_question(ctx) # Figure out what user wants here
     return
-  if(ctx.user.state == "answering"):
+  if ctx.user.state == "answering":
     handle_answer(ctx) # Figure out crowdsourcer's answer here
     return
   if(ctx.user.state == "modeling"):
     handle_model(ctx) # Handle preferences here
     return
+  if(ctx.user.state == "updating"):
+    handle_update(ctx) # Handle preferences here
+    return
   if(ctx.user.state == "idle"):
     handle_idle(ctx) # Figure out new state here
 
 def handle_idle(ctx):
-  ctx.reply("Hi %s, you can use the command `/recommend` to ask for a recommendation!" % ctx.user.name)
+  ctx.reply("Hi %s, you can use the command /menu!" % ctx.user.name)
 
 # start user modeling state
 @bot.command('start')
@@ -37,6 +40,25 @@ def start(ctx):
 def recommend(ctx):
   start_question(ctx)
 
+@bot.command('addpreference')
+def addpreference(ctx):
+  start_addpreference(ctx)
 
+@bot.command('display')
+def displaypreference(ctx):
+  start_displaypreference(ctx)
+
+@bot.command('remove')
+def removepreference(ctx):
+  start_removepreference(ctx)
+
+@bot.command('menu')
+def menu(ctx):
+  start_menu(ctx)
+
+@bot.command('points')
+def points(ctx):
+  start_points(ctx)
 
 bot.start_polling()
+
