@@ -36,12 +36,13 @@ class Context:
     self.chat_id = update.message.chat_id
     self.message = update.message.text
     self.user = update.message.from_user
-    self.bot = bot
     self.user = db.get_user(update.message.from_user.id,
     user_name=update.message.from_user.first_name,
     chat_id=update.message.chat_id)
+    self._bot = bot
 
   def reply(self, message):
-    self.bot.send_message(chat_id=self.chat_id, text=message, parse_mode='Markdown')
+    self._bot.send_message(self.chat_id, text=message, parse_mode='Markdown')
 
-
+  def send_message(self, chat_id, message):
+    self._bot.send_message(chat_id, text=message, parse_mode='Markdown')

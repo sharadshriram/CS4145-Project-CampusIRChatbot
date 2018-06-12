@@ -16,14 +16,19 @@ def handle_answer(ctx):
       closest = get_close_matches(ctx.message, ['yes','no'], cutoff=0)[0]
       if closest == 'yes':
         reply = 'Added `%s` to my survey. Thank you for your answer!' % (pending[user_id] + ' ' + courses[pending[user_id]])
-        print(ctx.user.incentive)
-        print(ctx.user.incentive+1)
-        update_user(user_id, {'incentive': (ctx.user.incentive+1)})
-        ctx.user.get_task().save_answer(pending[user_id], user_id)
+        ctx.user.get_task().save_answer(pending[user_id], ctx.user)
       else:
-        reply = 'Please retype the recommendation?'
-    del pending[user_id]
-    ctx.reply(reply)
+        closest = get_close_matches(ctx.message, ['yes','no'], cutoff=0)[0]
+        if closest == 'yes':
+          reply = 'Added `%s` to my survey. Thank you for your answer!' % (pending[user_id] + ' ' + courses[pending[user_id]])
+          print(ctx.user.incentive)
+          print(ctx.user.incentive+1)
+          update_user(user_id, {'incentive': (ctx.user.incentive+1)})
+          ctx.user.get_task().save_answer(pending[user_id], user_id)
+        else:
+          reply = 'Please retype the recommendation?'
+      del pending[user_id]
+      ctx.reply(reply)
 
   else:
     closest = get_close_matches(ctx.message, [code + ' ' + courses[code] for code in courses], cutoff=0)[0]

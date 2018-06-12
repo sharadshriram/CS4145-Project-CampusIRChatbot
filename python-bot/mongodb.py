@@ -98,7 +98,7 @@ class User:
     update_user(self.id, {'preferences': self.preferences})
 
   def send_message(self, ctx, message):
-    ctx.bot.send_message(chat_id=self.chat_id, text=message, parse_mode='Markdown')
+    ctx.send_message(self.chat_id, message)
 
   def del_preference(self, pref_type, preference):
     preferences = set(self.preferences[pref_type])
@@ -116,11 +116,18 @@ class Task:
     self.date = task['date']
     self.answers = task['answers']
 
-  def save_answer(self, answer, worker_id):
-    self.answers.append(answer)
-    worker = get_user(worker_id)
+  def get_pref(self):
+    return self.user
+
+  def save_answer(self, answer, user):
+    worker = user
+    user_pref = set(self.preferences)
+    worker_pref = set(worker.preferences[self.type])
+    similarity = len(user_pref.intersection(worker_pref))
+    self.answers.append([answer,similarity])
     worker.conclude_task()
     update_task(self.id, {'answers': self.answers})
 
-  def get_pref(self):
-    return self.user
+  def finish(self):
+    self.finished = True
+    update_task(self.id, {'finished': True})
