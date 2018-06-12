@@ -14,15 +14,12 @@ The chatbot is accessible at [](). However, ping us on the course slack channel 
     
 ## Project Structure
 The project directories and files are structured in the following tree:
-- `images` runs worker API, requester API and chatbot
-- `python-bot`
-    - `api_helper.py` helper methods to call the worker API
-    - `chatbot.py` entry point of chatbot, uses messaging and logger functionality
-    - `facebook_helper.py` helper methods to call Facebook API and Facebook-specific functionality
-    - `local_test.py` tests communication with chatbot without having to use the Facebook interface
-    - `logger.py` wraps (heroku) logging functionality
-    - `messaging.py` logic to handle the chatbot interaction flow by reading user messages and replying according to current chatbot state
-- `README.md`
+
+    - `images` runs worker API, requester API and chatbot
+    - `python-bot`
+        - `file` purpose
+        -
+    - `README.md`
 
 ## Setting Up
 
