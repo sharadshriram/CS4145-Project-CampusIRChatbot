@@ -9,7 +9,9 @@ def notify_workers(ctx, task):
     user = db.User(user)
     crowd_pref = set(user.preferences[task.type])
 
+    if(user.id == ctx.user.id):
+      continue
+
     if(user_pref.intersection(crowd_pref)):
       user.give_task(task)
       user.send_message(ctx, 'Hi, I am looking for a course recommendation for a student that liked: \n %s' % get_course_names(user_pref))
-

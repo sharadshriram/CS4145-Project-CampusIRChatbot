@@ -91,7 +91,7 @@ class User:
     update_user(self.id, {'preferences': self.preferences})
 
   def send_message(self, ctx, message):
-    ctx.bot.send_message(chat_id=self.chat_id, text=message, parse_mode='Markdown')
+    ctx.send_message(self.chat_id, message)
 
 class Task:
   def __init__(self, task):
@@ -112,3 +112,6 @@ class Task:
     worker.conclude_task()
     update_task(self.id, {'answers': self.answers})
 
+  def finish(self):
+    self.finished = True
+    update_task(self.id, {'finished': True})
