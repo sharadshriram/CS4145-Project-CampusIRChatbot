@@ -89,7 +89,8 @@ class User:
   def conclude_task(self):
     self.task = None
     self.set_state('idle')
-    update_user(self.id ,{'task': None})
+    self.incentive = self.incentive + 1
+    update_user(self.id ,{'task': None, 'incentive': self.incentive})
 
   def save_preference(self, pref_type, preference):
     preferences = set(self.preferences[pref_type])
@@ -115,9 +116,6 @@ class Task:
     self.preferences = self.user.preferences[task['type']]
     self.date = task['date']
     self.answers = task['answers']
-
-  def get_pref(self):
-    return self.user
 
   def save_answer(self, answer, user):
     worker = user

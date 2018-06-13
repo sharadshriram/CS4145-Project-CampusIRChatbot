@@ -1,5 +1,5 @@
 from difflib import get_close_matches
-from recommendations import recommendations, recommendation_list
+from recommendations import recommendations, recommendation_list, get_course_names
 
 courses = recommendations['course']['options']
 
@@ -35,7 +35,7 @@ def start_addpreference(ctx):
 
 def start_displaypreference(ctx):
     if len(ctx.user.preferences['course']) > 0:
-        reply = '''Your preferences list consists of %s \n''' %(ctx.user.preferences['course'])
+        reply = '''Your preferences list consists of %s \n''' % get_course_names(ctx.user.preferences['course'])
     else:
         reply = '''You do not have any preferences in your list'''
     ctx.reply(reply)
