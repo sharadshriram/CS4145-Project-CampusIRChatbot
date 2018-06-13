@@ -7,18 +7,19 @@ This is a Telegram-bot which is designed and developed as part of the CS4145: Cr
 ## Using the chatbot
 The chatbot is accessible at [](). However, ping us on the course slack channel for you to interact with the chatbot. Once you are inside the chatbot, you can use the following commands to interact with it
 
-    - `\start` starts the interaction with the chatbot
-    - `\stop` stops the interaction with the chatbot
-    - `\recommend` gives recommendations of courses based on user preferences
-    - `\courses` updates the course preferences for the user.
+    - `/start` starts the interaction with the chatbot
+    - `/display` displays the course preferences of the user
+    - `/recommend` gives recommendations of courses based on user preferences
+    - `/addpreference` updates the course preferences for the user.
+    - `/points` displays the points accumulated 
+    - `/remove` remove the preference of the user
+    - `/menu` lists all the chatbot commands
     
 ## Project Structure
 The project directories and files are structured in the following tree:
 
-    - `images` runs worker API, requester API and chatbot
-    - `python-bot`
-        - `file` purpose
-        -
+    - `images` images for the repo
+    - `python-bot` files of implementation
     - `README.md`
 
 ## Setting Up
