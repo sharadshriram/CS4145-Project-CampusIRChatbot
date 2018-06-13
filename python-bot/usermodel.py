@@ -44,6 +44,8 @@ def start_displaypreference(ctx):
 def start_points(ctx):
     reply = '''You have %d points in your account''' % (ctx.user.incentive)
     ctx.reply(reply)
+    reply1 = '''Hey!!! The good news for you is you can claim your points for printer credits or a coffee voucher. 100 points would be equivalent to 5 euro credits.'''
+    ctx.reply(reply1)
 
 
 def start_removepreference(ctx):

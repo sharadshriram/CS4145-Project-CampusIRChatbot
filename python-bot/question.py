@@ -43,7 +43,7 @@ def aggregate_answer(task):
       results[answer[0]] = 0
     results[answer[0]] += answer[1]
     
-  sorted_results = sorted(results.items(), key=operator.itemgetter(1))
+  sorted_results = sorted(results.items(), key=operator.itemgetter(1), reverse= True)
 
-  return 'My top result is: %s' % get_course_names([sorted_results[0][0]])
+  return 'The most recommended course is: %s' % get_course_names([sorted_results[0][0]])
 
