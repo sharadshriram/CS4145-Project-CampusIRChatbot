@@ -2,7 +2,7 @@
 import logging
 import settings
 from bot import Bot
-from usermodel import start_model, handle_model, start_addpreference, start_menu, start_removepreference, handle_update, start_displaypreference, start_points
+from usermodel import start_model, handle_model, start_addpreference, start_removepreference, handle_update, start_displaypreference, start_points
 from question import start_question, handle_question
 from answer import handle_answer
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=settings.LOGLEVEL)
@@ -59,6 +59,17 @@ def menu(ctx):
 @bot.command('points')
 def points(ctx):
   start_points(ctx)
+
+myci_menu = '''Hello %s
+/addpreference to add courses to your preference list
+/remove to remove a course from your list
+/display to display your current preferences
+/recommend to ask request course recommendation
+/points to check your current points'''
+
+def start_menu(ctx):
+    reply = myci_menu % (ctx.user.name)
+    ctx.reply(reply)
 
 bot.start_polling()
 

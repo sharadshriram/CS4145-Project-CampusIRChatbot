@@ -6,14 +6,6 @@ courses = recommendations['course']['options']
 greeting = '''Hello %s, my name is MyCI. I am a chatbot that can help you find recommendations around campus with the help of other students.
 /menu to get the menu'''
 
-myci_menu = '''Hello %s
-/addpreference to add courses to your preference list
-/remove to remove a course from your list
-/display to display your current preferences
-/recommend to ask request course recommendation
-/points to check your current points
-/cancel to stop the chat'''
-
 greeting1 = '''Hello %s, Welcome back. Type in the courses that you would like to add to your preference list'''
 
 # pending course confirmations for users
@@ -51,11 +43,6 @@ def start_points(ctx):
 def start_removepreference(ctx):
     ctx.reply('Type in the course name you wish to remove from your preferences')
     ctx.user.set_state('updating')
-
-
-def start_menu(ctx):
-    reply = myci_menu % (ctx.user.name)
-    ctx.reply(reply)
 
 
 def handle_model(ctx):

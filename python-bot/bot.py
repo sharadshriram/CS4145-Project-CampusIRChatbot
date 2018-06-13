@@ -20,7 +20,11 @@ class Bot:
   def command(self, command_name):
     def decorator(command_function):
       def handler_function(bot, update):
-        command_function(Context(bot, update))
+        ctx = Context(bot, update)
+        if(ctx.user.state == 'idle'):
+          command_function(Context(bot, update))
+        else:
+          ctx.reply('Please finish answering the question first.')
       handler = CommandHandler(command_name, handler_function)
       self.dispatcher.add_handler(handler)
     return decorator
