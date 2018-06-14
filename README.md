@@ -19,11 +19,36 @@ The chatbot is accessible at [](). However, ping us on the course slack channel 
 The project directories and files are structured in the following tree:
 
     - `images` images for the repo
-    - `python-bot` files of implementation
+    - `python-bot` 
+        - `answer.py` processing and aggregating answers recieved from tasks
+        - `bot.py`    handles bot instances for handling messages and updates
+        - `courselist.csv` compiled list of course title and course codes
+        - `main.py` starts the bot, maps the commands to respective functions
+        - `mongodb.py` to handle MongoDB to create and modify data relating to the task and user model
+        - `neha.py` intial implementation of task allocation done by [@neha](https://github.com/nehasreet)
+        - `question.py` module to get questions/ queries from user
+        - `recommendations.py` provides course recommendations based on `csv` file
+        - `requirements.txt` third-party modules that are required
+        - `settings.py` set the access code and timeout period of request for the bot
+        - `taskallocation.py` create and allocate tasks to similar users 
+        - `usermodel.py` managing the user model based on the chat messages
     - `README.md`
 
 ## Setting Up
+Before getting started you'll need the following software installed on your operating system:
+- Python 3 
+- MongoDB (If you're using Windows, [this link](https://www.youtube.com/watch?v=ll2tY6KH8Tk) is useful)
 
-### Installations
+The following python-packages are the next that needs to be installed. Don't forget to be using Powershell/ Terminal with Administrator or super-user privileges. To make your lives easy you can paste the following command to install the packages using pip. Do not have pip? [Check this out](https://pip.pypa.io/en/stable/installing/):
+
+`pip install -r requirements.txt `
 
 ### Local Testing
+If all the installation went well, you can launch Powershell/ Terminal and run the following command to start the bot service:
+
+`python main.py`
+
+And in Telegram search for `MyCI_bot` and you're good to go!
+Have fun! 
+
+In the event of any trouble create an issue on this repo. We'll address it as soon as possible.
